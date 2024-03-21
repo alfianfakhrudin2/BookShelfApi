@@ -2,20 +2,10 @@
 const { nanoid } = require('nanoid');
 const { books } = require('./books');
 const addBookHandler = (request, h) => {
-  const {
-    name,
-    year,
-    author,
-    summary,
-    publisher,
-    pageCount,
-    readPage,
-    reading,
-  } = request.payload;
+  const {name, year, author, summary, publisher, pageCount, readPage, reading,} = request.payload;
 
   if (!name) {
-    return h
-      .response({
+    return h.response({
         status: 'fail',
         message: 'Gagal menambahkan buku. Mohon isi nama buku',
       })
@@ -23,8 +13,7 @@ const addBookHandler = (request, h) => {
   }
 
   if (readPage > pageCount) {
-    return h
-      .response({
+    return h.response({
         status: 'fail',
         message:
           'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount',
@@ -37,27 +26,13 @@ const addBookHandler = (request, h) => {
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
 
-  const newBook = {
-    id,
-    name,
-    year,
-    author,
-    summary,
-    publisher,
-    pageCount,
-    readPage,
-    reading,
-    finished,
-    insertedAt,
-    updatedAt,
-  };
+  const newBook = {id, name, year, author, summary, publisher, pageCount, readPage, reading, finished, insertedAt, updatedAt,};
 
   books.push(newBook);
 
   const isSuccess = books.some((book) => book.id === id);
   if (isSuccess) {
-    return h
-      .response({
+    return h.response({
         status: 'success',
         message: 'Buku berhasil ditambahkan',
         data: {
@@ -67,8 +42,7 @@ const addBookHandler = (request, h) => {
       .code(201);
   }
 
-  return h
-    .response({
+  return h.response({
       status: 'fail',
       message: 'Buku gagal ditambahkan',
     })
@@ -89,15 +63,14 @@ const getAllBooksHandler = (request, h) => {
     return isNameMatch && isReadingMatch && isFinishedMatch;
   });
 
-  return h
-    .response({
+  return h.response({
       status: 'success',
       data: {
-        books: filteredBooks.map((book) => ({
-          id: book.id,
-          name: book.name,
-          publisher: book.publisher,
-        })),
+            books: filteredBooks.map((book) => ({
+              id: book.id, name: book.name, publisher: book.publisher,
+            }
+          )
+        ),
       },
     })
     .code(200);
@@ -116,8 +89,7 @@ const getBookByIdHandler = (request, h) => {
       .code(404);
   }
 
-  return h
-    .response({
+  return h.response({
       status: 'success',
       data: {
         book,
@@ -141,8 +113,7 @@ const editBookHandler = (request, h) => {
   const updatedAt = new Date().toISOString();
 
   if (!name) {
-    return h
-      .response({
+    return h.response({
         status: 'fail',
         message: 'Gagal memperbarui buku. Mohon isi nama buku',
       })
@@ -150,8 +121,7 @@ const editBookHandler = (request, h) => {
   }
 
   if (readPage > pageCount) {
-    return h
-      .response({
+    return h.response({
         status: 'fail',
         message:
           'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount',
@@ -161,8 +131,7 @@ const editBookHandler = (request, h) => {
 
   const index = books.findIndex((b) => b.id === id);
   if (index === -1) {
-    return h
-      .response({
+    return h.response({
         status: 'fail',
         message: 'Gagal memperbarui buku. Id tidak ditemukan',
       })
@@ -182,8 +151,7 @@ const editBookHandler = (request, h) => {
     updatedAt,
   };
 
-  return h
-    .response({
+  return h.response({
       status: 'success',
       message: 'Buku berhasil diperbarui',
     })
@@ -195,8 +163,7 @@ const deleteBookByIdHandler = (request, h) => {
 
   const index = books.findIndex((b) => b.id === id);
   if (index === -1) {
-    return h
-      .response({
+    return h.response({
         status: 'fail',
         message: 'Buku gagal dihapus. Id tidak ditemukan',
       })
@@ -204,8 +171,7 @@ const deleteBookByIdHandler = (request, h) => {
   }
 
   books.splice(index, 1);
-  return h
-    .response({
+  return h.response({
       status: 'success',
       message: 'Buku berhasil dihapus',
     })
